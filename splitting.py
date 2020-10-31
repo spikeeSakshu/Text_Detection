@@ -28,7 +28,7 @@ def split_data(data_dir, base_save, train_split, val_split):
     images= glob(data_dir+'*.jpg')
 
     len_train_images= int(len(images)* train_split)
-    len_train_images= int(len(images)* val_split)
+    len_val_images= int(len(images)* val_split)
 
     for image in sample(images, len_train_images):
         anntotaion_file= image.split('.')[0]+'.txt'
@@ -37,7 +37,7 @@ def split_data(data_dir, base_save, train_split, val_split):
 
         images.remove(image)
 
-    for image in sample(images, len_train_images):
+    for image in sample(images, len_val_images):
         anntotaion_file= image.split('.')[0]+'.txt'
         shutil.copy(image, val_dir)
         shutil.copy(anntotaion_file, val_dir)
