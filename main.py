@@ -17,7 +17,7 @@ model_dir= 'Models/'
 
 if os.path.exists(image_dir) and os.path.exists(json_file):
     # Converting data from JSON file to YOLO format
-    convert_json(json_file)
+    convert_json(json_file, output_dir, image_dir, model_dir)
 else:
     print('Please check the path for json and image_dir')
     exit()

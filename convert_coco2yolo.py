@@ -2,14 +2,23 @@ import json
 import os
 import shutil
 
-def copy_image_file(image_file):
+def save_classes(categories, model_dir):
+    sorted_dict=  sorted(categories.items())
+    print('coco names', sorted_dict)
+    with open(os.path.join(model_dir, 'coco-text.names'), 'w', encoding='utf-8') as f:
+        for cls in sorted_dict:
+            f.write(cls[1] + '\n')
+            
+    f.close()
+
+def copy_image_file(image_file, image_dir, output_dir):
     image_path= os.path.join(image_dir, image_file)
     shutil.copy(image_path, output_dir)
 
-def save_txt(anno_dict, coco_name_list):
+def save_txt(anno_dict, coco_name_list, image_dir, output_dir):
     for k, v in anno_dict.items():
         # Transfering the image into output_dir
-        copy_image_file(v[0][0])
+        copy_image_file(v[0][0], image_dir, output_dir)
 
         file_name = v[0][0].split(".")[0] + ".txt"
 
@@ -60,14 +69,6 @@ def convert_anno(labels, images_info):
             anno_dict[image_id] = anno_infos
     return anno_dict
     
-def save_classes(labels):
-    sorted_classes = list(map(lambda x: x['name'], sorted(labels['cats'], key=lambda x: x['id'])))
-    print('coco names', sorted_classes)
-    with open('coco.names', 'w', encoding='utf-8') as f:
-        for cls in sorted_classes:
-            f.write(cls + '\n')
-    f.close()
-
 def load_images_info(labels):
     images_info = {}
     for image_id in labels['imgs']:
@@ -87,7 +88,7 @@ def find_categories(labels):
 
     return categories
 
-def convert_json(json_file):
+def convert_json(json_file, output_dir, image_dir, model_dir):
     print('Loading JSON file')
     labels = json.load(open(json_file, 'r', encoding='utf-8'))
     print('Done loading JSON file')
@@ -103,9 +104,14 @@ def convert_json(json_file):
 
     print("\nStart converting...")
     anno_dict = convert_anno(labels, images_info)
-    print("converting done, total labels", len(anno_dict))
+    print("Converting done, total labels", len(anno_dict))
 
-    print("saving txt file...")
-    save_txt(anno_dict, coco_name_list)
-    print("saving done")
+    print("\nSaving txt file...")
+    save_txt(anno_dict, coco_name_list, image_dir, output_dir)
+    print("Saving done")
+
+    print("\nCoco-text.names file")
+    save_classes(coco_name_list, model_dir):
+    print("DONE!!")
+
 
