@@ -1,7 +1,7 @@
 import os
 from convert_coco2yolo import convert_json
 
-def creating_folders():
+def create_folders():
     # Creating output_dir if not exists
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -16,6 +16,9 @@ output_dir = "Dataset/yolo_data/"
 model_dir= 'Models/'
 
 if os.path.exists(image_dir) and os.path.exists(json_file):
+    # Creating output_dir and model_dir if not exists
+    create_folders()
+
     # Converting data from JSON file to YOLO format
     convert_json(json_file, output_dir, image_dir, model_dir)
 else:

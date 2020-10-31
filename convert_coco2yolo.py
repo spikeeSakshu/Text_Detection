@@ -4,7 +4,7 @@ import shutil
 
 def save_classes(categories, model_dir):
     sorted_dict=  sorted(categories.items())
-    print('coco names', sorted_dict)
+    print('\tcoco names', sorted_dict)
     with open(os.path.join(model_dir, 'coco-text.names'), 'w', encoding='utf-8') as f:
         for cls in sorted_dict:
             f.write(cls[1] + '\n')
@@ -106,12 +106,12 @@ def convert_json(json_file, output_dir, image_dir, model_dir):
     anno_dict = convert_anno(labels, images_info)
     print("Converting done, total labels", len(anno_dict))
 
-    print("\nSaving txt file...")
+    print("\nSaving txt file and transferring images...")
     save_txt(anno_dict, coco_name_list, image_dir, output_dir)
     print("Saving done")
 
-    print("\nCoco-text.names file")
-    save_classes(coco_name_list, model_dir):
+    print("\nSaving 'Coco-text.names' file")
+    save_classes(coco_id_name_map, model_dir)
     print("DONE!!")
 
 
